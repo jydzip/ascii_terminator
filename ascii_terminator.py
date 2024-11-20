@@ -4,6 +4,7 @@ from PIL import Image, ImageFont
 import os
 import time
 import argparse
+import platform
 
 custom_chars = {
     "`": " ",
@@ -91,13 +92,16 @@ def convert_frames_to_ascii(frames, intensity: int):
     return ascii_frames
 
 
-def animate_ascii(ascii_frames, frame_pause=.02, num_iterations=15, clear_prev_frame=True):
+def animate_ascii(ascii_frames, frame_pause=.02, num_iterations=15, system_name="Windows", clear_prev_frame=True):
     for i in range(num_iterations):
         for frame in ascii_frames:
             print(frame)
             time.sleep(frame_pause)
-            if clear_prev_frame:                
-                os.system('cls')
+            if clear_prev_frame:      
+                if system_name == "Windows":
+                    os.system('cls')
+                else:
+                    os.system('clear')
 
 
 if __name__ == "__main__":
@@ -114,4 +118,4 @@ if __name__ == "__main__":
     frames = extract_gif_frames(im, fillEmpty=True)
     ascii_frames = convert_frames_to_ascii(frames, args.intensity)
 
-    animate_ascii(ascii_frames, num_iterations=200)
+    animate_ascii(ascii_frames, num_iterations=200, system_name=platform.system())
